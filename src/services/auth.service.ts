@@ -1,19 +1,16 @@
 import { Request, Response } from "express";
-import { data_source } from "../modules/data-source.module";
-import { User } from "../entities/user.entity";
 import { PasswordService } from "./password.service";
 import { sign } from "jsonwebtoken";
+import { userRepository } from "../repositories/user.repository";
 
 export const authSecret = "itsauthsecret";
 
 export class AuthService {
-  static userRepository = data_source.getRepository(User);
-
   static async login(req: Request, res: Response) {
     try {
       const params = req.body;
 
-      const user = await this.userRepository
+      const user = await userRepository()
         .createQueryBuilder("users")
         .addSelect("users.password")
         .where("users.username = :username", {
@@ -64,5 +61,31 @@ export class AuthService {
       success: true,
       data: profile,
     });
+  }
+
+  static async updateProfile(req: Request, res: Response) {
+    try {
+      const params = req.body;
+
+      const user = await userRepository().findOneByOrFail({
+        id: req.user?.id as number,
+      });
+
+      user.name = params.name;
+      user.phone = params.phone;
+
+      await userRepository().save(user);
+
+      res.json({
+        success: true,
+        message: "Berhasil mengedit profil",
+      });
+    } catch (err) {
+      console.log(err);
+      res.json({
+        success: false,
+        message: "Gagal mengedit profil",
+      });
+    }
   }
 }

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
-import { authSecret, AuthService } from "../services/auth.service";
+import { authSecret } from "../services/auth.service";
+import { userRepository } from "../repositories/user.repository";
 
 export async function appMiddleware(
   req: Request,
@@ -25,7 +26,7 @@ export async function appMiddleware(
     const payload: any = verify(token as string, authSecret);
     const id = payload.id;
 
-    const user = await AuthService.userRepository.findOneByOrFail({ id });
+    const user = await userRepository().findOneByOrFail({ id });
 
     req.user = user;
   } catch (err) {

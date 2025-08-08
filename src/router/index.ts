@@ -3,13 +3,12 @@ import { auth_router } from "./auth.router";
 import { User } from "../entities/user.entity";
 import { PasswordService } from "../services/password.service";
 import { appMiddleware } from "../middlewares/app.middleware";
-import { AuthService } from "../services/auth.service";
+import { userRepository } from "../repositories/user.repository";
 
 const router = Router().use(appMiddleware);
 
 router.get("/", async (_, res) => {
-  const userRepository = AuthService.userRepository;
-  const user = await userRepository.findOneBy({ id: 1 });
+  const user = await userRepository().findOneBy({ id: 1 });
 
   if (!user) {
     const password = await PasswordService.generate("superadmin");
@@ -22,7 +21,7 @@ router.get("/", async (_, res) => {
       role: "admin",
     };
 
-    await userRepository.save(newUser);
+    await userRepository().save(newUser);
   }
 
   res.json({
