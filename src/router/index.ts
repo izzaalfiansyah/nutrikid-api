@@ -1,14 +1,14 @@
 import { Router } from "express";
 import { auth_router } from "./auth.router";
-import { data_source } from "../modules/data-source.module";
 import { User } from "../entities/user.entity";
 import { PasswordService } from "../services/password.service";
 import { appMiddleware } from "../middlewares/app.middleware";
+import { AuthService } from "../services/auth.service";
 
 const router = Router().use(appMiddleware);
 
 router.get("/", async (_, res) => {
-  const userRepository = data_source.getRepository(User);
+  const userRepository = AuthService.userRepository;
   const user = await userRepository.findOneBy({ id: 1 });
 
   if (!user) {

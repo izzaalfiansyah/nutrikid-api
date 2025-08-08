@@ -7,12 +7,13 @@ import { sign } from "jsonwebtoken";
 export const authSecret = "itsauthsecret";
 
 export class AuthService {
+  static userRepository = data_source.getRepository(User);
+
   static async login(req: Request, res: Response) {
     try {
       const params = req.body;
 
-      const userRepository = data_source.getRepository(User);
-      const user = await userRepository
+      const user = await this.userRepository
         .createQueryBuilder("users")
         .addSelect("users.password")
         .where("users.username = :username", {
