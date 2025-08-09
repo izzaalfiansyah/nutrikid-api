@@ -9,6 +9,7 @@ auth_router.post("/login", AuthService.login);
 auth_router
   .use(authMiddleware)
   .get("/profile", AuthService.profile)
-  .post("/profile", AuthService.updateProfile);
+  .post("/profile", AuthService.updateProfile)
+  .post("/profile/change-password", AuthService.changePassword);
 
 export { auth_router };

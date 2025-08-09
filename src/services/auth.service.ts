@@ -88,4 +88,29 @@ export class AuthService {
       });
     }
   }
+
+  static async changePassword(req: Request, res: Response) {
+    try {
+      const params = req.body;
+
+      const user = await userRepository().findOneByOrFail({
+        id: req.user?.id as number,
+      });
+
+      user.password = await PasswordService.generate(params.password);
+
+      await userRepository().save(user);
+
+      res.json({
+        success: true,
+        message: "Berhasil mengedit password",
+      });
+    } catch (err) {
+      console.log(err);
+      res.json({
+        success: false,
+        message: "Gagal mengedit password",
+      });
+    }
+  }
 }
