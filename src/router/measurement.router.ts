@@ -11,6 +11,6 @@ measurement_router
   .get("/:id", MeasurementService.show)
   .put("/:id", authMiddleware, MeasurementService.update)
   .delete("/:id", authMiddleware, MeasurementService.destroy)
-  .use("/suggestion", measurement_suggestion_router);
+  .use("/:measurement_id/suggestion", measurement_suggestion_router);
 
 export { measurement_router };
