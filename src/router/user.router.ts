@@ -6,6 +6,7 @@ const user_router = Router();
 user_router
   .get("/", UserService.getAll)
   .post("/", UserService.store)
+  .get("/:id", UserService.show)
   .put("/:id", UserService.update)
   .delete("/:id", UserService.destroy)
   .post("/change-password", UserService.changePassword);

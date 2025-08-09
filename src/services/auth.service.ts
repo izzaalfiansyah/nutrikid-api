@@ -59,7 +59,9 @@ export class AuthService {
 
     res.json({
       success: true,
-      data: profile,
+      data: {
+        profile,
+      },
     });
   }
 

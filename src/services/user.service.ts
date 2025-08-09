@@ -41,9 +41,31 @@ export class UserService {
       success: true,
       message: "Berhasil mengambil data pengguna",
       data: {
+        total,
         users,
       },
     });
+  }
+
+  static async show(req: Request, res: Response) {
+    try {
+      const user = await userRepository().findOneByOrFail({
+        id: req.params.id as any,
+      });
+
+      res.json({
+        success: true,
+        message: "Berhasil mengambil data pengguna",
+        data: {
+          user,
+        },
+      });
+    } catch (err) {
+      res.status(400).json({
+        succes: false,
+        message: "User tidak ditemukan",
+      });
+    }
   }
 
   static async store(req: Request, res: Response) {
