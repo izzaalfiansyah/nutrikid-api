@@ -4,6 +4,7 @@ import { User } from "../entities/user.entity";
 import { PasswordService } from "../services/password.service";
 import { appMiddleware } from "../middlewares/app.middleware";
 import { userRepository } from "../repositories/user.repository";
+import { school_router } from "./school.router";
 
 const router = Router().use(appMiddleware);
 
@@ -30,5 +31,6 @@ router.get("/", async (_, res) => {
 });
 
 router.use("/", auth_router);
+router.use("/school", school_router);
 
 export { router };
