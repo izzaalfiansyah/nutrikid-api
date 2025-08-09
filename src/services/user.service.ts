@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { User } from "../entities/user.entity";
 import { userRepository } from "../repositories/user.repository";
 import { PasswordService } from "./password.service";
-import { School } from "../entities/school.entity";
 import { schoolRepository } from "../repositories/school.repository";
 
 export class UserService {
@@ -122,6 +121,36 @@ export class UserService {
       res.status(402).json({
         success: false,
         message: "Pengguna gagal dihapus",
+      });
+    }
+  }
+
+  static async changePassword(req: Request, res: Response) {
+    try {
+      if (req.user?.role != "admin" && req.user?.id != (req.params.id as any)) {
+        throw "Dont't have permission";
+      }
+
+      const params = req.body;
+      const id = req.params.id as any;
+
+      const user = await userRepository().findOneByOrFail({
+        id,
+      });
+
+      user.password = await PasswordService.generate(params.password);
+
+      await userRepository().save(user);
+
+      res.json({
+        success: true,
+        message: "Berhasil mengedit password",
+      });
+    } catch (err) {
+      console.log(err);
+      res.json({
+        success: false,
+        message: "Gagal mengedit password",
       });
     }
   }

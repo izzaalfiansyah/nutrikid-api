@@ -7,6 +7,7 @@ user_router
   .get("/", UserService.getAll)
   .post("/", UserService.store)
   .put("/:id", UserService.update)
-  .delete("/:id", UserService.destroy);
+  .delete("/:id", UserService.destroy)
+  .post("/change-password", UserService.changePassword);
 
 export { user_router };
