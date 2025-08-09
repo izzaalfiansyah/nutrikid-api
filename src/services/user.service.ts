@@ -21,6 +21,18 @@ export class UserService {
         query = query.where("users.role = :role", { role: params.role });
       }
 
+      let school_id: any = params.school_id;
+
+      if (req.user?.role != "admin") {
+        school_id = req.user?.school?.id;
+      }
+
+      if (school_id) {
+        query = query.where("users.school_id = :school_id", {
+          school_id,
+        });
+      }
+
       if (params.search) {
         query = query.where(
           "users.name like :search or users.username like :search",

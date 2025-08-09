@@ -17,10 +17,15 @@ export class StudentService {
         .where("students.deleted_at is null");
 
       const params = req.query;
+      let school_id: any = params.school_id;
 
-      if (params.school_id) {
+      if (req.user?.role != "admin") {
+        school_id = req.user?.school?.id;
+      }
+
+      if (school_id) {
         query.where("students.school_id = :school_id", {
-          school_id: params.school_id,
+          school_id,
         });
       }
 

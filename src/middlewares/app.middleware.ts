@@ -28,13 +28,10 @@ export async function appMiddleware(
 
     const user = await userRepository().findOneOrFail({
       where: { id },
+      relations: ["school"],
     });
 
     req.user = user;
-
-    if (user.role != "admin" && !req.params.school_id && !!user.school) {
-      req.params.school_id = user.school!.id as any;
-    }
   } catch (err) {
     //do nothing
   }

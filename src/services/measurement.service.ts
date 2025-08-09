@@ -23,9 +23,15 @@ export class MeasurementService {
         });
       }
 
-      if (params.school_id) {
+      let school_id: any = params.school_id;
+
+      if (req.user?.role != "admin") {
+        school_id = req.user?.school?.id;
+      }
+
+      if (school_id) {
         query.where("student.school_id = :school_id", {
-          school_id: params.school_id,
+          school_id: school_id,
         });
       }
 
