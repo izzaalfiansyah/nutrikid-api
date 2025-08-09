@@ -21,9 +21,11 @@ export function calculateResult({
     const student = new Student();
     student.birth_date = moment(birth_date).toDate();
 
-    const age = student.age;
-    const age_month = student.age_month;
-    const age_month_total = student.age_month_total;
+    const studentJson = student.toJson();
+
+    const age = studentJson.age;
+    const age_month = studentJson.age_month;
+    const age_month_total = studentJson.age_month_total;
 
     const z_score = calculateZScore(bmi, age_month_total, gender);
     const status = calculateStatus(z_score);

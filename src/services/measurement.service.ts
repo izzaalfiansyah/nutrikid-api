@@ -58,6 +58,8 @@ export class MeasurementService {
       // do nothing
     }
 
+    measurements = measurements.map((m) => m.toJson());
+
     res.json({
       success: true,
       message: "Berhasil mengambil data pengukuran",
@@ -78,7 +80,7 @@ export class MeasurementService {
         success: true,
         message: "Berhasil mengambil data pengukuran",
         data: {
-          measurement,
+          measurement: measurement.toJson(),
         },
       });
     } catch (err) {
