@@ -9,6 +9,6 @@ user_router
   .get("/:id", UserService.show)
   .put("/:id", UserService.update)
   .delete("/:id", UserService.destroy)
-  .post("/change-password", UserService.changePassword);
+  .post("/:id/change-password", UserService.changePassword);
 
 export { user_router };

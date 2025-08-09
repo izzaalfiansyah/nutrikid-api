@@ -26,9 +26,15 @@ export async function appMiddleware(
     const payload: any = verify(token as string, authSecret);
     const id = payload.id;
 
-    const user = await userRepository().findOneByOrFail({ id });
+    const user = await userRepository().findOneOrFail({
+      where: { id },
+    });
 
     req.user = user;
+
+    if (user.role != "admin" && !req.params.school_id && !!user.school) {
+      req.params.school_id = user.school!.id as any;
+    }
   } catch (err) {
     //do nothing
   }

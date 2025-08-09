@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { Student } from "../entities/student.entity";
 import { studentRepository } from "../repositories/student.repository";
 import { schoolRepository } from "../repositories/school.repository";
+import moment from "moment";
+import { measurementRepository } from "../repositories/measurement.repository";
 
 export class StudentService {
   static async getAll(req: Request, res: Response) {
@@ -9,9 +11,10 @@ export class StudentService {
     let total = 0;
 
     try {
-      const query = studentRepository().createQueryBuilder("students");
-
-      query.where("students.deleted_at is null");
+      const query = studentRepository()
+        .createQueryBuilder("students")
+        .leftJoinAndSelect("students.school", "school")
+        .where("students.deleted_at is null");
 
       const params = req.query;
 
@@ -51,19 +54,53 @@ export class StudentService {
     });
   }
 
+  static async show(req: Request, res: Response) {
+    try {
+      const student = await studentRepository().findOneByOrFail({
+        id: req.params.id as any,
+      });
+
+      const measurement = await measurementRepository()
+        .createQueryBuilder("measurements")
+        .where("measurements.student_id = :student_id", {
+          student_id: student.id,
+        })
+        .orderBy("created_at", "DESC")
+        .orderBy("id", "DESC")
+        .limit(1)
+        .getOne();
+
+      if (measurement) {
+        student.measurement = measurement;
+      }
+
+      res.json({
+        success: true,
+        message: "Berhasil mengambil data siswa",
+        data: {
+          student,
+        },
+      });
+    } catch (err) {
+      res.status(404).json({
+        success: false,
+        message: "Siswa tidak ditemukan",
+      });
+    }
+  }
+
   static async store(req: Request, res: Response) {
     try {
       const school = await schoolRepository().findOneByOrFail({
         id: req.body.school_id,
       });
 
-      const student: Student = {
-        nisn: req.body.nisn,
-        name: req.body.name,
-        gender: req.body.gender,
-        school,
-        birth_date: req.body.birth_date,
-      } as any;
+      const student = new Student();
+      student.nisn = req.body.nisn;
+      student.name = req.body.name;
+      student.gender = req.body.gender;
+      student.birth_date = moment(req.body.birth_date).toDate();
+      student.school = school;
 
       await studentRepository().save(student);
 
@@ -72,7 +109,7 @@ export class StudentService {
         message: "Siswa berhasil ditambahkan",
       });
     } catch (err) {
-      res.status(402).json({
+      res.status(422).json({
         success: false,
         message: "Siswa gagal ditambahkan",
       });
@@ -87,7 +124,7 @@ export class StudentService {
 
       student.name = req.body.name;
       student.gender = req.body.gender;
-      student.birth_date = req.body.birth_date;
+      student.birth_date = moment(req.body.birth_date).toDate();
 
       await studentRepository().save(student);
 
@@ -96,7 +133,7 @@ export class StudentService {
         message: "Siswa berhasil diedit",
       });
     } catch (err) {
-      res.status(402).json({
+      res.status(422).json({
         success: false,
         message: "Siswa gagal diedit",
       });
@@ -118,7 +155,7 @@ export class StudentService {
         message: "Siswa berhasil dihapus",
       });
     } catch (err) {
-      res.status(402).json({
+      res.status(422).json({
         success: false,
         message: "Siswa gagal dihapus",
       });

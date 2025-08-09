@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -18,6 +19,7 @@ export class Measurement {
     eager: true,
     onDelete: "CASCADE",
   })
+  @JoinColumn({ name: "student_id" })
   student: Student;
 
   @Column("double")
@@ -33,6 +35,7 @@ export class Measurement {
     eager: true,
     onDelete: "NO ACTION",
   })
+  @JoinColumn({ name: "creator_id" })
   creator?: User;
 
   @OneToMany(

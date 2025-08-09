@@ -9,11 +9,12 @@ export class MeasurementSuggestionService {
     let total = 0;
 
     try {
-      const query =
-        measurementSuggestionRepository().createQueryBuilder("suggestions");
+      const params = req.query;
+      const query = measurementSuggestionRepository()
+        .createQueryBuilder("suggestions")
+        .leftJoinAndSelect("suggestions.creator", "creator");
 
-      const measurement_id =
-        req.params?.measurement_id || req.body?.measurement_id;
+      const measurement_id = params?.measurement_id || req.body?.measurement_id;
 
       if (measurement_id) {
         query.where("suggestions.measurement_id = :measurement_id", {
@@ -23,8 +24,8 @@ export class MeasurementSuggestionService {
 
       total = await query.getCount();
 
-      const limit: any = req.params.limit || 20;
-      const page: any = req.params.page || 1;
+      const limit: any = params.limit || 20;
+      const page: any = params.page || 1;
       const skip = limit * (page - 1);
 
       suggestions = await query.take(limit).skip(skip).getMany();
@@ -60,7 +61,7 @@ export class MeasurementSuggestionService {
         message: "Saran berhasil ditambah",
       });
     } catch (err) {
-      res.status(402).json({
+      res.status(422).json({
         success: false,
         message: "Saran gagal ditambah",
       });
@@ -83,7 +84,7 @@ export class MeasurementSuggestionService {
         message: "Saran berhasil diedit",
       });
     } catch (err) {
-      res.status(402).json({
+      res.status(422).json({
         success: false,
         message: "Saran gagal diedit",
       });
@@ -101,7 +102,7 @@ export class MeasurementSuggestionService {
         message: "Saran berhasil dihapus",
       });
     } catch (err) {
-      res.status(402).json({
+      res.status(422).json({
         success: false,
         message: "Saran gagal dihapus",
       });

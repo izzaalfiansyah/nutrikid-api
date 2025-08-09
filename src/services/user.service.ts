@@ -10,20 +10,24 @@ export class UserService {
     let total = 0;
 
     try {
-      const params = req.params;
+      const params = req.query;
 
-      const query = userRepository()
+      let query = userRepository()
         .createQueryBuilder("users")
+        .leftJoinAndSelect("users.school", "school")
         .where("users.deleted_at is null");
 
       if (params.role) {
-        query.where("users.role = :role", { role: params.role });
+        query = query.where("users.role = :role", { role: params.role });
       }
 
       if (params.search) {
-        query.where("users.name like :search or users.username like :search", {
-          search: `%${params.search}%`,
-        });
+        query = query.where(
+          "users.name like :search or users.username like :search",
+          {
+            search: `%${params.search}%`,
+          },
+        );
       }
 
       total = await query.getCount();
@@ -92,7 +96,7 @@ export class UserService {
         message: "Pengguna berhasil ditambah",
       });
     } catch (err) {
-      res.status(402).json({
+      res.status(422).json({
         success: false,
         message: "Pengguna gagal ditambah",
       });
@@ -118,7 +122,7 @@ export class UserService {
         message: "Pengguna berhasil diedit",
       });
     } catch (err) {
-      res.status(402).json({
+      res.status(422).json({
         success: false,
         message: "Pengguna gagal diedit",
       });
@@ -140,7 +144,7 @@ export class UserService {
         message: "Pengguna berhasil dihapus",
       });
     } catch (err) {
-      res.status(402).json({
+      res.status(422).json({
         success: false,
         message: "Pengguna gagal dihapus",
       });

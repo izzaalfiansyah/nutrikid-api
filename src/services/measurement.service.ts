@@ -12,11 +12,10 @@ export class MeasurementService {
     try {
       const query = measurementRepository()
         .createQueryBuilder("measurements")
-        .select("measurements.*")
-        .leftJoin("students", "student", "student.id = measurements.student_id")
-        .where("measurements.deleted_at != NULL");
+        .leftJoinAndSelect("measurements.student", "student")
+        .where("measurements.deleted_at is null");
 
-      const params = req.params;
+      const params = req.query;
 
       if (params.student_id) {
         query.where("measurements.student_id = :student_id", {
@@ -111,7 +110,7 @@ export class MeasurementService {
         message: "Data pengukuran berhasil ditambah",
       });
     } catch (err) {
-      res.status(402).json({
+      res.status(422).json({
         success: false,
         message: "Data pengukuran gagal ditambah",
       });
@@ -141,7 +140,7 @@ export class MeasurementService {
         message: "Data pengukuran berhasil diedit",
       });
     } catch (err) {
-      res.status(402).json({
+      res.status(422).json({
         success: false,
         message: "Data pengukuran gagal diedit",
       });
@@ -163,7 +162,7 @@ export class MeasurementService {
         message: "Data pengukuran berhasil dihapus",
       });
     } catch (err) {
-      res.status(402).json({
+      res.status(422).json({
         success: false,
         message: "Data pengukuran gagal dihapus",
       });

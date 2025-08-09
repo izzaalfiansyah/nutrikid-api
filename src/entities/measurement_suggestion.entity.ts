@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Measurement } from "./measurement.entity";
 import { User } from "./user.entity";
 
@@ -10,6 +16,7 @@ export class MeasurementSuggestion {
   @ManyToOne(() => Measurement, (measurement) => measurement.id, {
     onDelete: "CASCADE",
   })
+  @JoinColumn({ name: "measurement_id" })
   measurement: Measurement;
 
   @Column()
@@ -19,6 +26,7 @@ export class MeasurementSuggestion {
     eager: true,
     onDelete: "NO ACTION",
   })
+  @JoinColumn({ name: "creator_id" })
   creator?: User;
 
   @Column("timestamp", {

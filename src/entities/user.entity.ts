@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { School } from "./school.entity";
 
 @Entity("users")
@@ -24,7 +30,11 @@ export class User {
   })
   role: "admin" | "teacher" | "expert";
 
-  @ManyToOne(() => School, (school) => school.id, { nullable: true })
+  @ManyToOne(() => School, (school) => school.id, {
+    nullable: true,
+    eager: true,
+  })
+  @JoinColumn({ name: "school_id" })
   school?: School;
 
   @Column("timestamp", {

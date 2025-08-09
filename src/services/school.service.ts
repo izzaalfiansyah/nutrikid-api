@@ -6,11 +6,13 @@ import { School } from "../entities/school.entity";
 @Entity()
 export class SchoolService {
   static async getAll(req: Request, res: Response) {
-    let school: Array<School> = [];
+    let schools: Array<School> = [];
 
     try {
-      const result = await schoolRepository().find({});
-      school = result;
+      const result = await schoolRepository().find({
+        where: { deleted_at: null as any },
+      });
+      schools = result;
     } catch (err) {
       // do nothing
     }
@@ -19,7 +21,7 @@ export class SchoolService {
       success: true,
       message: "Berhasil mengambil data sekolah",
       data: {
-        school,
+        schools,
       },
     });
   }
@@ -39,7 +41,7 @@ export class SchoolService {
         message: "Sekolah berhasil ditambah",
       });
     } catch (err) {
-      res.status(402).json({
+      res.status(422).json({
         success: false,
         message: "Sekolah gagal ditambah",
       });
@@ -62,7 +64,7 @@ export class SchoolService {
         message: "Sekolah berhasil diedit",
       });
     } catch (err) {
-      res.status(402).json({
+      res.status(422).json({
         success: false,
         message: "Sekolah gagal diedit",
       });
@@ -84,7 +86,7 @@ export class SchoolService {
         message: "Sekolah berhasil dihapus",
       });
     } catch (err) {
-      res.status(402).json({
+      res.status(422).json({
         success: false,
         message: "Gagal menghapus sekolah",
       });
