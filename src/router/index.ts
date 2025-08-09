@@ -8,6 +8,7 @@ import { school_router } from "./school.router";
 import { student_router } from "./student.router";
 import { measurement_router } from "./measurement.router";
 import { user_router } from "./user.router";
+import { measurement_suggestion_router } from "./measurement_suggestion.router";
 
 const router = Router().use(appMiddleware);
 
@@ -43,5 +44,6 @@ router.use("/user", user_router);
 router.use("/school", school_router);
 router.use("/student", student_router);
 router.use("/measurement", measurement_router);
+router.use("/measurement-suggestion", measurement_suggestion_router);
 
 export { router };

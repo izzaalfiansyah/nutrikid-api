@@ -1,13 +1,16 @@
 import { Router } from "express";
 import { MeasurementService } from "../services/measurement.service";
+import { authMiddleware } from "../middlewares/auth.middleware";
+import { measurement_suggestion_router } from "./measurement_suggestion.router";
 
 const measurement_router = Router();
 
 measurement_router
   .get("/", MeasurementService.getAll)
-  .post("/", MeasurementService.store)
+  .post("/", authMiddleware, MeasurementService.store)
   .get("/:id", MeasurementService.show)
-  .put("/:id", MeasurementService.update)
-  .delete("/:id", MeasurementService.destroy);
+  .put("/:id", authMiddleware, MeasurementService.update)
+  .delete("/:id", authMiddleware, MeasurementService.destroy)
+  .use("/suggestion", measurement_suggestion_router);
 
 export { measurement_router };
