@@ -7,6 +7,9 @@ export class Student {
   id: number;
 
   @Column()
+  nisn: string;
+
+  @Column()
   name: string;
 
   @Column("date")

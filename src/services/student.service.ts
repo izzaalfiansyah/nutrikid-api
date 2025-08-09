@@ -54,6 +54,7 @@ export class StudentService {
       });
 
       const student: Student = {
+        nisn: req.body.nisn,
         name: req.body.name,
         gender: req.body.gender,
         school,
