@@ -14,7 +14,10 @@ export class Measurement {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Student, (student) => student.id, { eager: true })
+  @ManyToOne(() => Student, (student) => student.id, {
+    eager: true,
+    onDelete: "CASCADE",
+  })
   student: Student;
 
   @Column("double")
@@ -26,8 +29,11 @@ export class Measurement {
   @Column("double")
   student_bmi: number;
 
-  @ManyToOne(() => User, (user) => user.id, { eager: true })
-  creator: User;
+  @ManyToOne(() => User, (user) => user.id, {
+    eager: true,
+    onDelete: "NO ACTION",
+  })
+  creator?: User;
 
   @OneToMany(
     () => MeasurementSuggestion,

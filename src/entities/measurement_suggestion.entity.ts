@@ -7,14 +7,19 @@ export class MeasurementSuggestion {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Measurement, (measurement) => measurement.id)
+  @ManyToOne(() => Measurement, (measurement) => measurement.id, {
+    onDelete: "CASCADE",
+  })
   measurement: Measurement;
 
   @Column()
   advice: string;
 
-  @ManyToOne(() => User, (user) => user.id, { eager: true })
-  creator: User;
+  @ManyToOne(() => User, (user) => user.id, {
+    eager: true,
+    onDelete: "NO ACTION",
+  })
+  creator?: User;
 
   @Column("timestamp", {
     default: () => "current_timestamp",

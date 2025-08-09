@@ -5,16 +5,18 @@ import { PasswordService } from "../services/password.service";
 import { appMiddleware } from "../middlewares/app.middleware";
 import { userRepository } from "../repositories/user.repository";
 import { school_router } from "./school.router";
+import { student_router } from "./student.router";
 
 const router = Router().use(appMiddleware);
 
 router.get("/", async (_, res) => {
-  const user = await userRepository().findOneBy({ id: 1 });
+  const id = 1;
+  const user = await userRepository().findOneBy({ id });
 
   if (!user) {
     const password = await PasswordService.generate("superadmin");
     const newUser: User = {
-      id: 1,
+      id,
       username: "superadmin",
       password,
       name: "Mas Admin",
@@ -27,10 +29,15 @@ router.get("/", async (_, res) => {
 
   res.json({
     hello: "World",
+    app: {
+      name: process.env.APP_NAME,
+      description: process.env.APP_DESCRIPTION,
+    },
   });
 });
 
 router.use("/", auth_router);
 router.use("/school", school_router);
+router.use("/student", student_router);
 
 export { router };

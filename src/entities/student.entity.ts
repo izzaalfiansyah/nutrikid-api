@@ -17,7 +17,9 @@ export class Student {
   })
   gender: "l" | "p";
 
-  @ManyToOne(() => School, (school) => school.id)
+  @ManyToOne(() => School, (school) => school.id, {
+    onDelete: "CASCADE",
+  })
   school: School;
 
   @Column("timestamp", {

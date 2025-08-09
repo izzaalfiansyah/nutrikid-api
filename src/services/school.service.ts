@@ -6,22 +6,22 @@ import { School } from "../entities/school.entity";
 @Entity()
 export class SchoolService {
   static async getAll(req: Request, res: Response) {
+    let school: Array<School> = [];
+
     try {
       const result = await schoolRepository().find({});
-
-      res.json({
-        success: true,
-        message: "Berhasil mengambil data sekolah",
-        data: {
-          school: result,
-        },
-      });
+      school = result;
     } catch (err) {
-      res.status(404).json({
-        success: false,
-        message: "Gagal mengambil data sekolah",
-      });
+      // do nothing
     }
+
+    res.json({
+      success: true,
+      message: "Berhasil mengambil data sekolah",
+      data: {
+        school,
+      },
+    });
   }
 
   static async store(req: Request, res: Response) {

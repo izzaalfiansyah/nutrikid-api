@@ -7,4 +7,9 @@ export class School {
 
   @Column()
   name: string;
+
+  @Column("timestamp", {
+    nullable: true,
+  })
+  deleted_at?: Date;
 }
