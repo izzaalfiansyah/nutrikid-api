@@ -33,7 +33,11 @@ export class StudentService {
 
       total = await query.getCount();
 
-      students = await query.getMany();
+      const limit: any = params.limit || 20;
+      const page: any = params.page || 1;
+      const skip = limit * (page - 1);
+
+      students = await query.take(limit).skip(skip).getMany();
     } catch (err) {
       // do nothing
     }
