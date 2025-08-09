@@ -9,6 +9,7 @@ import { student_router } from "./student.router";
 import { measurement_router } from "./measurement.router";
 import { user_router } from "./user.router";
 import { measurement_suggestion_router } from "./measurement_suggestion.router";
+import { MeasurementService } from "../services/measurement.service";
 
 const router = Router().use(appMiddleware);
 
@@ -45,5 +46,6 @@ router.use("/school", school_router);
 router.use("/student", student_router);
 router.use("/measurement", measurement_router);
 router.use("/measurement-suggestion", measurement_suggestion_router);
+router.post("/calculate", MeasurementService.calculate);
 
 export { router };

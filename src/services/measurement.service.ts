@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { Measurement } from "../entities/measurement.entity";
 import { measurementRepository } from "../repositories/measurement.repository";
-import { schoolRepository } from "../repositories/school.repository";
-import { calculateBmi } from "../utils/calculate-bmi.utils";
+import { calculateResult } from "../utils/calculate-result.utils";
+import { studentRepository } from "../repositories/student.repository";
 
 export class MeasurementService {
   static async getAll(req: Request, res: Response) {
@@ -92,22 +92,26 @@ export class MeasurementService {
   static async store(req: Request, res: Response) {
     try {
       const params = req.body;
-      const student = await schoolRepository().findOneByOrFail({
+      const student = await studentRepository().findOneByOrFail({
         id: params.student_id,
       });
 
-      const { bmi, height, weight } = calculateBmi({
+      const { bmi, height, weight, age, age_month } = calculateResult({
         height: params.student_height,
         weight: params.student_weight,
+        birth_date: student.birth_date,
+        gender: student.gender,
       });
 
-      const measurement: Measurement = {
-        student: student as any,
-        student_height: height,
-        student_weight: weight,
-        student_bmi: bmi,
-        creator: req.user,
-      } as any;
+      const measurement = new Measurement();
+
+      measurement.student = student;
+      measurement.student_age = age;
+      measurement.student_age_month = age_month;
+      measurement.student_height = height;
+      measurement.student_weight = weight;
+      measurement.student_bmi = bmi;
+      measurement.creator = req.user!;
 
       await measurementRepository().save(measurement);
 
@@ -128,12 +132,17 @@ export class MeasurementService {
       const params = req.body;
       const id = req.params.id as any;
 
-      const { bmi, height, weight } = calculateBmi({
-        height: params.student_height,
-        weight: params.student_weight,
+      const measurement = await measurementRepository().findOneOrFail({
+        where: { id },
+        relations: ["student"],
       });
 
-      const measurement = await measurementRepository().findOneByOrFail({ id });
+      const { bmi, height, weight } = calculateResult({
+        height: params.student_height,
+        weight: params.student_weight,
+        birth_date: measurement.student.birth_date,
+        gender: measurement.student.gender,
+      });
 
       measurement.student_height = height;
       measurement.student_weight = weight;
@@ -171,6 +180,30 @@ export class MeasurementService {
       res.status(422).json({
         success: false,
         message: "Data pengukuran gagal dihapus",
+      });
+    }
+  }
+
+  static async calculate(req: Request, res: Response) {
+    try {
+      const result = calculateResult({
+        height: req.body.height,
+        weight: req.body.weight,
+        birth_date: req.body.birth_date,
+        gender: req.body.gender,
+      });
+
+      res.json({
+        success: true,
+        message: "Berhasil menghitung status kesehatan",
+        data: {
+          ...result,
+        },
+      });
+    } catch (err) {
+      res.status(422).json({
+        success: false,
+        message: "Gagal menghitung status kesehatan",
       });
     }
   }

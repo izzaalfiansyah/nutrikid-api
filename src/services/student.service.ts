@@ -50,6 +50,10 @@ export class StudentService {
       // do nothing
     }
 
+    students = students.map((student) => {
+      return student.toJson();
+    });
+
     res.json({
       success: true,
       message: "Berhasil mengambil data siswa",
@@ -83,7 +87,7 @@ export class StudentService {
         success: true,
         message: "Berhasil mengambil data siswa",
         data: {
-          student,
+          student: student.toJson(),
         },
       });
     } catch (err) {
