@@ -147,7 +147,6 @@ export class UserService {
         message: "Berhasil mengedit password",
       });
     } catch (err) {
-      console.log(err);
       res.json({
         success: false,
         message: "Gagal mengedit password",

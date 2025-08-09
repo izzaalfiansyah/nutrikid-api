@@ -10,6 +10,7 @@ auth_router
   .use(authMiddleware)
   .get("/profile", AuthService.profile)
   .post("/profile", AuthService.updateProfile)
-  .post("/profile/change-password", AuthService.changePassword);
+  .post("/profile/change-password", AuthService.changePassword)
+  .post("/refresh-token", AuthService.refreshToken);
 
 export { auth_router };
