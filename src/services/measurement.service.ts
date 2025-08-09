@@ -42,6 +42,8 @@ export class MeasurementService {
         });
       }
 
+      total = await query.getCount();
+
       const limit: any = params.limit || 20;
       const page: any = params.page || 1;
       const skip = limit * (page - 1);
