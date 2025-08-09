@@ -7,6 +7,7 @@ import { userRepository } from "../repositories/user.repository";
 import { school_router } from "./school.router";
 import { student_router } from "./student.router";
 import { measurement_router } from "./measurement.router";
+import { user_router } from "./user.router";
 
 const router = Router().use(appMiddleware);
 
@@ -38,6 +39,7 @@ router.get("/", async (_, res) => {
 });
 
 router.use("/", auth_router);
+router.use("/user", user_router);
 router.use("/school", school_router);
 router.use("/student", student_router);
 router.use("/measurement", measurement_router);

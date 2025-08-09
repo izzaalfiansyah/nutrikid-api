@@ -73,7 +73,11 @@ export class SchoolService {
     try {
       const id = req.params.id as any;
 
-      await schoolRepository().delete({ id });
+      const school = await schoolRepository().findOneByOrFail({ id });
+
+      school.deleted_at = new Date();
+
+      await schoolRepository().save(school);
 
       res.json({
         success: true,

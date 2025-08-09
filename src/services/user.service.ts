@@ -103,4 +103,26 @@ export class UserService {
       });
     }
   }
+
+  static async destroy(req: Request, res: Response) {
+    try {
+      const user = await userRepository().findOneByOrFail({
+        id: req.params.id as any,
+      });
+
+      user.deleted_at = new Date();
+
+      await userRepository().save(user);
+
+      res.json({
+        success: true,
+        message: "Pengguna berhasil dihapus",
+      });
+    } catch (err) {
+      res.status(402).json({
+        success: false,
+        message: "Pengguna gagal dihapus",
+      });
+    }
+  }
 }

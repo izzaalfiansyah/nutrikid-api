@@ -150,7 +150,13 @@ export class MeasurementService {
 
   static async destroy(req: Request, res: Response) {
     try {
-      await measurementRepository().delete({ id: req.params.id as any });
+      const measurement = await measurementRepository().findOneByOrFail({
+        id: req.params.id as any,
+      });
+
+      measurement.deleted_at = new Date();
+
+      await measurementRepository().save(measurement);
 
       res.json({
         success: true,

@@ -105,9 +105,13 @@ export class StudentService {
 
   static async destroy(req: Request, res: Response) {
     try {
-      const student = await studentRepository().delete({
+      const student = await studentRepository().findOneByOrFail({
         id: req.params.id as any,
       });
+
+      student.deleted_at = new Date();
+
+      await studentRepository().save(student);
 
       res.json({
         success: true,
