@@ -15,6 +15,7 @@ export class UserService {
       let query = userRepository()
         .createQueryBuilder("users")
         .leftJoinAndSelect("users.school", "school")
+        .orderBy("users.name", "ASC")
         .where("users.deleted_at is null");
 
       if (params.role) {
@@ -23,7 +24,7 @@ export class UserService {
 
       let school_id: any = params.school_id;
 
-      if (req.user?.role != "admin") {
+      if (!school_id && req.user?.role != "admin") {
         school_id = req.user?.school?.id;
       }
 

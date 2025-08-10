@@ -14,12 +14,13 @@ export class StudentService {
       const query = studentRepository()
         .createQueryBuilder("students")
         .leftJoinAndSelect("students.school", "school")
+        .orderBy("students.nisn", "ASC")
         .where("students.deleted_at is null");
 
       const params = req.query;
       let school_id: any = params.school_id;
 
-      if (req.user?.role != "admin") {
+      if (!school_id && req.user?.role != "admin") {
         school_id = req.user?.school?.id;
       }
 

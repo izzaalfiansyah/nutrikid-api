@@ -11,6 +11,7 @@ export class SchoolService {
     try {
       const result = await schoolRepository().find({
         where: { deleted_at: null as any },
+        order: { name: "ASC" },
       });
       schools = result;
     } catch (err) {

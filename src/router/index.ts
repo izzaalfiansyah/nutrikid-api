@@ -40,12 +40,12 @@ router.get("/", async (_, res) => {
   });
 });
 
-router.use("/", auth_router);
-router.use("/user", user_router);
 router.use("/school", school_router);
+router.use("/user", user_router);
 router.use("/student", student_router);
 router.use("/measurement", measurement_router);
 router.use("/measurement-suggestion", measurement_suggestion_router);
 router.post("/calculate", MeasurementService.calculate);
+router.use("/", auth_router);
 
 export { router };

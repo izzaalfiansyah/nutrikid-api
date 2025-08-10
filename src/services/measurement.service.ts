@@ -13,6 +13,7 @@ export class MeasurementService {
       const query = measurementRepository()
         .createQueryBuilder("measurements")
         .leftJoinAndSelect("measurements.student", "student")
+        .orderBy("measurements.created_at", "DESC")
         .where("measurements.deleted_at is null");
 
       const params = req.query;
@@ -25,7 +26,7 @@ export class MeasurementService {
 
       let school_id: any = params.school_id;
 
-      if (req.user?.role != "admin") {
+      if (!school_id && req.user?.role != "admin") {
         school_id = req.user?.school?.id;
       }
 
