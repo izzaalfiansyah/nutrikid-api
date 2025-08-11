@@ -15,6 +15,7 @@ import {
 } from "../utils/calculate-status.utils";
 import { calculateResult } from "../utils/calculate-result.utils";
 import { calculateZScore } from "../utils/calculate-z-score.utils";
+import { getSuggestionAdvices } from "../utils/get-suggestion-advices.utils";
 
 @Entity("measurements")
 export class Measurement {
@@ -66,6 +67,10 @@ export class Measurement {
   z_score: number;
   status: MeasurementStatus;
 
+  get suggestion_advices(): Array<string> {
+    return getSuggestionAdvices(this.z_score);
+  }
+
   toJson() {
     const z_score = calculateZScore(
       this.student_bmi,
@@ -78,6 +83,7 @@ export class Measurement {
       ...this,
       z_score,
       status,
+      suggestion_advices: this.suggestion_advices,
     };
   }
 }
