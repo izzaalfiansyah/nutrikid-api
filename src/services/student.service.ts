@@ -81,7 +81,8 @@ export class StudentService {
         .getOne();
 
       if (measurement) {
-        student.measurement = measurement;
+        measurement.student = student.toJson();
+        student.measurement = measurement.toJson();
       }
 
       res.json({
