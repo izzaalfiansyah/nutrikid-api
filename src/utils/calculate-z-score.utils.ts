@@ -163,12 +163,12 @@ export function calculateZScore(bmi: number, month: number, gender: Gender) {
     for (let i = 0; i < ranges.length; i++) {
       const range = ranges[i]!;
       if (i == 0 && bmi < range.min) {
-        z_score = range.z!;
+        z_score = -4;
         break;
       }
 
       if (i == ranges.length - 1 && bmi > range.max) {
-        z_score = range.z!;
+        z_score = 4;
         break;
       }
 
