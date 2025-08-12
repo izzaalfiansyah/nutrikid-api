@@ -40,6 +40,10 @@ export class Measurement {
   @Column("double")
   student_age_month: number;
 
+  get student_age_month_total(): number {
+    return this.student_age * 12 + this.student_age_month;
+  }
+
   @Column("double")
   student_bmi: number;
 
@@ -83,12 +87,14 @@ export class Measurement {
     const z_score = this.z_score;
     const status = this.status;
     const suggestion_advices = this.suggestion_advices;
+    const student_age_month_total = this.student_age_month_total;
 
     return {
       ...this,
       z_score,
       status,
       suggestion_advices,
+      student_age_month_total,
     };
   }
 }

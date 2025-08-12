@@ -46,6 +46,7 @@ router.use("/student", student_router);
 router.use("/measurement", measurement_router);
 router.use("/measurement-suggestion", measurement_suggestion_router);
 router.post("/calculate", MeasurementService.calculate);
+router.get("/default-zscore", MeasurementService.getDefaultZScore);
 router.use("/", auth_router);
 
 export { router };

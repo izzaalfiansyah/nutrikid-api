@@ -3,6 +3,10 @@ import { Measurement } from "../entities/measurement.entity";
 import { measurementRepository } from "../repositories/measurement.repository";
 import { calculateResult } from "../utils/calculate-result.utils";
 import { studentRepository } from "../repositories/student.repository";
+import {
+  female_z_scores,
+  male_z_scores,
+} from "../utils/calculate-z-score.utils";
 
 export class MeasurementService {
   static async getAll(req: Request, res: Response) {
@@ -209,5 +213,26 @@ export class MeasurementService {
         message: "Gagal menghitung status kesehatan",
       });
     }
+  }
+
+  static async getDefaultZScore(req: Request, res: Response) {
+    const gender = req.query.gender as any;
+
+    if (!gender) {
+      res.status(422).json({
+        success: false,
+        message: "Gender tidak diketahui",
+      });
+    }
+
+    const z_scores = gender == "l" ? male_z_scores : female_z_scores;
+
+    return res.json({
+      success: true,
+      message: "Berhasil mengambil z score",
+      data: {
+        z_scores,
+      },
+    });
   }
 }
