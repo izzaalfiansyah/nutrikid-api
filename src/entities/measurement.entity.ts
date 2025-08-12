@@ -13,7 +13,6 @@ import {
   calculateStatus,
   MeasurementStatus,
 } from "../utils/calculate-status.utils";
-import { calculateResult } from "../utils/calculate-result.utils";
 import { calculateZScore } from "../utils/calculate-z-score.utils";
 import { getSuggestionAdvices } from "../utils/get-suggestion-advices.utils";
 
@@ -64,26 +63,32 @@ export class Measurement {
   @Column("timestamp", { nullable: true })
   deleted_at?: Date;
 
-  z_score: number;
-  status: MeasurementStatus;
+  get z_score(): number {
+    return calculateZScore(
+      this.student_bmi,
+      this.student_age * 12 + this.student_age_month,
+      this.student.gender,
+    );
+  }
+
+  get status(): MeasurementStatus {
+    return calculateStatus(this.z_score);
+  }
 
   get suggestion_advices(): Array<string> {
     return getSuggestionAdvices(this.z_score);
   }
 
   toJson() {
-    const z_score = calculateZScore(
-      this.student_bmi,
-      this.student_age * 12 + this.student_age_month,
-      this.student.gender,
-    );
-    const status = calculateStatus(z_score);
+    const z_score = this.z_score;
+    const status = this.status;
+    const suggestion_advices = this.suggestion_advices;
 
     return {
       ...this,
       z_score,
       status,
-      suggestion_advices: this.suggestion_advices,
+      suggestion_advices,
     };
   }
 }

@@ -43,14 +43,23 @@ export class Student {
   deleted_at?: Date;
 
   measurement?: Measurement;
-  age: number;
-  age_month: number;
-  age_month_total: number;
+
+  get age(): number {
+    return moment().diff(this.birth_date, "years");
+  }
+
+  get age_month(): number {
+    return this.age_month_total - this.age * 12;
+  }
+
+  get age_month_total(): number {
+    return moment().diff(this.birth_date, "months");
+  }
 
   toJson() {
-    const age = moment().diff(this.birth_date, "years");
-    const age_month_total = moment().diff(this.birth_date, "months");
-    const age_month = age_month_total - age * 12;
+    const age = this.age;
+    const age_month_total = this.age_month_total;
+    const age_month = this.age_month;
 
     return {
       ...this,
