@@ -1,5 +1,5 @@
 import moment from "moment";
-import { Gender, Student } from "../entities/student.entity";
+import { Gender } from "../entities/student.entity";
 import { calculateZScore } from "./calculate-z-score.utils";
 import { calculateStatus } from "./calculate-status.utils";
 
@@ -8,6 +8,7 @@ export interface CalculateResultProps {
   weight: number;
   gender: Gender;
   birth_date: Date;
+  created_at?: Date;
 }
 
 export function calculateResult({
@@ -15,17 +16,14 @@ export function calculateResult({
   weight,
   birth_date,
   gender,
+  created_at,
 }: CalculateResultProps) {
   try {
     const bmi = weight / Math.pow(height / 100, 2);
-    const student = new Student();
-    student.birth_date = moment(birth_date).toDate();
 
-    const studentJson = student.toJson();
-
-    const age = studentJson.age;
-    const age_month = studentJson.age_month;
-    const age_month_total = studentJson.age_month_total;
+    const age = moment(created_at).diff(birth_date, "years");
+    const age_month_total = moment(created_at).diff(birth_date, "months");
+    const age_month = age_month_total - age * 12;
 
     const z_score = calculateZScore(bmi, age_month_total, gender);
     const status = calculateStatus(z_score);
