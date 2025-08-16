@@ -160,22 +160,35 @@ export function calculateZScore(bmi: number, month: number, gender: Gender) {
 
   try {
     const ranges = selectedZScore!.z_scores_range;
+    const medianIndex = 3;
+
     for (let i = 0; i < ranges.length; i++) {
       const range = ranges[i]!;
-      if (i == 0 && bmi < range.min) {
-        z_score = -4;
-        break;
+      const median = ranges[medianIndex]!.min;
+      let sd_of_reference = 1;
+
+      if (bmi > median) {
+        sd_of_reference = ranges[medianIndex + 1]!.min - median;
+      } else {
+        sd_of_reference = median - ranges[medianIndex - 1]!.min;
       }
 
-      if (i == ranges.length - 1 && bmi > range.max) {
-        z_score = 4;
-        break;
-      }
+      z_score = (bmi - median) / sd_of_reference;
 
-      if (bmi >= range.min && bmi <= range.max) {
-        z_score = range.z!;
-        break;
-      }
+      // if (i == 0 && bmi < range.min) {
+      //   z_score = -4;
+      //   break;
+      // }
+      //
+      // if (i == ranges.length - 1 && bmi > range.max) {
+      //   z_score = 4;
+      //   break;
+      // }
+      //
+      // if (bmi >= range.min && bmi <= range.max) {
+      //   z_score = range.z!;
+      //   break;
+      // }
     }
   } catch (err) {
     // do nothing

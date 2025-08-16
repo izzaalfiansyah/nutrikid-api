@@ -76,7 +76,6 @@ export class StudentService {
           student_id: student.id,
         })
         .orderBy("created_at", "DESC")
-        .orderBy("id", "DESC")
         .limit(1)
         .getOne();
 

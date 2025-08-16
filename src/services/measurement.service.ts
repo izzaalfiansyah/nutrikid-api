@@ -120,6 +120,10 @@ export class MeasurementService {
       measurement.student_bmi = bmi;
       measurement.creator = req.user!;
 
+      if (params.created_at) {
+        measurement.created_at = params.created_at;
+      }
+
       await measurementRepository().save(measurement);
 
       res.json({
