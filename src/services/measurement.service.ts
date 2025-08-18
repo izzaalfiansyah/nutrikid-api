@@ -202,6 +202,7 @@ export class MeasurementService {
         weight: req.body.weight,
         birth_date: req.body.birth_date,
         gender: req.body.gender,
+        created_at: req.body.created_at,
       });
 
       res.json({
