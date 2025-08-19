@@ -108,6 +108,7 @@ export class MeasurementService {
         weight: params.student_weight,
         birth_date: student.birth_date,
         gender: student.gender,
+        created_at: req.body.created_at,
       });
 
       const measurement = new Measurement();
@@ -153,6 +154,7 @@ export class MeasurementService {
         weight: params.student_weight,
         birth_date: measurement.student.birth_date,
         gender: measurement.student.gender,
+        created_at: req.body.created_at,
       });
 
       measurement.student_height = height;
