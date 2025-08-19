@@ -149,7 +149,7 @@ export class MeasurementService {
         relations: ["student"],
       });
 
-      const { bmi, height, weight } = calculateResult({
+      const { bmi, height, weight, age, age_month } = calculateResult({
         height: params.student_height,
         weight: params.student_weight,
         birth_date: measurement.student.birth_date,
@@ -160,6 +160,9 @@ export class MeasurementService {
       measurement.student_height = height;
       measurement.student_weight = weight;
       measurement.student_bmi = bmi;
+      measurement.student_age = age;
+      measurement.student_age_month = age_month;
+      measurement.created_at = req.body.created_at;
 
       await measurementRepository().save(measurement);
 
