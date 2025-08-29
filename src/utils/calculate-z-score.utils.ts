@@ -7,7 +7,7 @@ function makeZScoreFromMonth(month: number, zranges: number[]) {
       return {
         z: [-3, -2, -1, 0, 1, 2, 3][i],
         min: z,
-        max: zranges[i + 1] || z + 3,
+        max: zranges[i + 1] || z,
       };
     }),
   };
@@ -174,21 +174,6 @@ export function calculateZScore(bmi: number, month: number, gender: Gender) {
       }
 
       z_score = (bmi - median) / sd_of_reference;
-
-      // if (i == 0 && bmi < range.min) {
-      //   z_score = -4;
-      //   break;
-      // }
-      //
-      // if (i == ranges.length - 1 && bmi > range.max) {
-      //   z_score = 4;
-      //   break;
-      // }
-      //
-      // if (bmi >= range.min && bmi <= range.max) {
-      //   z_score = range.z!;
-      //   break;
-      // }
     }
   } catch (err) {
     // do nothing
