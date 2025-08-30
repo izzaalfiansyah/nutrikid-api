@@ -25,17 +25,17 @@ export class StudentService {
       }
 
       if (school_id) {
-        query.where("students.school_id = :school_id", {
+        query.andWhere("students.school_id = :school_id", {
           school_id,
         });
       }
 
       if (params.gender) {
-        query.where("students.gender = :gender", { gender: params.gender });
+        query.andWhere("students.gender = :gender", { gender: params.gender });
       }
 
       if (params.search) {
-        query.where("students.name like :search", {
+        query.andWhere("students.name like :search", {
           search: `%${params.search}%`,
         });
       }

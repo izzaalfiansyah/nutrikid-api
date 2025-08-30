@@ -23,7 +23,7 @@ export class MeasurementService {
       const params = req.query;
 
       if (params.student_id) {
-        query.where("measurements.student_id = :student_id", {
+        query.andWhere("measurements.student_id = :student_id", {
           student_id: params.student_id,
         });
       }
@@ -35,19 +35,19 @@ export class MeasurementService {
       }
 
       if (school_id) {
-        query.where("student.school_id = :school_id", {
+        query.andWhere("student.school_id = :school_id", {
           school_id: school_id,
         });
       }
 
       if (params.start_date) {
-        query.where("measurements.created_at >= :start_date", {
+        query.andWhere("measurements.created_at >= :start_date", {
           start_date: params.start_date,
         });
       }
 
       if (params.end_date) {
-        query.where("measurements.created_at <= :end_date", {
+        query.andWhere("measurements.created_at <= :end_date", {
           end_date: params.end_date,
         });
       }

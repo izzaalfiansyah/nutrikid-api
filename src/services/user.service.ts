@@ -19,7 +19,7 @@ export class UserService {
         .where("users.deleted_at is null");
 
       if (params.role) {
-        query = query.where("users.role = :role", { role: params.role });
+        query = query.andWhere("users.role = :role", { role: params.role });
       }
 
       let school_id: any = params.school_id;
@@ -29,13 +29,13 @@ export class UserService {
       }
 
       if (school_id) {
-        query = query.where("users.school_id = :school_id", {
+        query = query.andWhere("users.school_id = :school_id", {
           school_id,
         });
       }
 
       if (params.search) {
-        query = query.where(
+        query = query.andWhere(
           "users.name like :search or users.username like :search",
           {
             search: `%${params.search}%`,
@@ -166,7 +166,10 @@ export class UserService {
 
   static async changePassword(req: Request, res: Response) {
     try {
-      if ((req as any).user?.role != "admin" && (req as any).user?.id != (req.params.id as any)) {
+      if (
+        (req as any).user?.role != "admin" &&
+        (req as any).user?.id != (req.params.id as any)
+      ) {
         throw "Dont't have permission";
       }
 
