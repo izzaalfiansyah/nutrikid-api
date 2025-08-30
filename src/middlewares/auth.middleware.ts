@@ -5,7 +5,7 @@ export async function authMiddleware(
   res: Response,
   next: Function,
 ) {
-  if (req.user) {
+  if ((req as any).user) {
     next();
     return;
   }

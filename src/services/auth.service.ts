@@ -55,7 +55,7 @@ export class AuthService {
   }
 
   static async profile(req: Request, res: Response) {
-    const profile = req.user;
+    const profile = (req as any).user;
 
     res.json({
       success: true,
@@ -70,7 +70,7 @@ export class AuthService {
       const params = req.body;
 
       const user = await userRepository().findOneByOrFail({
-        id: req.user?.id as number,
+        id: (req as any).user?.id as number,
       });
 
       user.name = params.name;
@@ -95,7 +95,7 @@ export class AuthService {
       const params = req.body;
 
       const user = await userRepository().findOneByOrFail({
-        id: req.user?.id as number,
+        id: (req as any).user?.id as number,
       });
 
       user.password = await PasswordService.generate(params.password);

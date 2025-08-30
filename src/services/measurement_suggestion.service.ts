@@ -51,7 +51,7 @@ export class MeasurementSuggestionService {
       });
 
       suggestion.advice = req.body.advice;
-      suggestion.creator = req.user!;
+      suggestion.creator = (req as any).user!;
       suggestion.measurement = measurement;
 
       await measurementSuggestionRepository().save(suggestion);

@@ -20,8 +20,8 @@ export class StudentService {
       const params = req.query;
       let school_id: any = params.school_id;
 
-      if (!school_id && req.user?.role != "admin") {
-        school_id = req.user?.school?.id;
+      if (!school_id && (req as any).user?.role != "admin") {
+        school_id = (req as any).user?.school?.id;
       }
 
       if (school_id) {

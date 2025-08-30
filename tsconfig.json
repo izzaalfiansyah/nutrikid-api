@@ -1,16 +1,18 @@
 {
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
+    "lib": ["es2021"],
+    "target": "es2021",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
     // File Layout
     "rootDir": "./src",
     "outDir": "./dist",
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "esnext",
     "esModuleInterop": true,
-    "moduleResolution": "nodenext",
 
     // For nodejs:
     // "lib": ["esnext", "es2022"],
@@ -19,7 +21,6 @@
     // and npm install -D @types/node
 
     // Other Outputs
-    "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
 
@@ -55,6 +56,7 @@
 
     // Allow JS files to be imported from TS and vice versa
     "allowJs": true,
+    "allowImportingTsExtensions": true,
 
     // Disallow features that require cross-file awareness
     "isolatedModules": true,

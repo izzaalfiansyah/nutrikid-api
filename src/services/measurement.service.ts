@@ -30,8 +30,8 @@ export class MeasurementService {
 
       let school_id: any = params.school_id;
 
-      if (!school_id && req.user?.role != "admin") {
-        school_id = req.user?.school?.id;
+      if (!school_id && (req as any).user?.role != "admin") {
+        school_id = (req as any).user?.school?.id;
       }
 
       if (school_id) {
@@ -119,7 +119,7 @@ export class MeasurementService {
       measurement.student_height = height;
       measurement.student_weight = weight;
       measurement.student_bmi = bmi;
-      measurement.creator = req.user!;
+      measurement.creator = (req as any).user!;
 
       if (params.created_at) {
         measurement.created_at = params.created_at;

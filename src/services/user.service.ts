@@ -24,8 +24,8 @@ export class UserService {
 
       let school_id: any = params.school_id;
 
-      if (!school_id && req.user?.role != "admin") {
-        school_id = req.user?.school?.id;
+      if (!school_id && (req as any).user?.role != "admin") {
+        school_id = (req as any).user?.school?.id;
       }
 
       if (school_id) {
@@ -166,7 +166,7 @@ export class UserService {
 
   static async changePassword(req: Request, res: Response) {
     try {
-      if (req.user?.role != "admin" && req.user?.id != (req.params.id as any)) {
+      if ((req as any).user?.role != "admin" && (req as any).user?.id != (req.params.id as any)) {
         throw "Dont't have permission";
       }
 

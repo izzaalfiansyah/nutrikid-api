@@ -31,7 +31,7 @@ export async function appMiddleware(
       relations: ["school"],
     });
 
-    req.user = user;
+    (req as any).user = user;
   } catch (err) {
     //do nothing
   }
