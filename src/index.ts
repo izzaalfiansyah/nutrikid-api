@@ -14,7 +14,13 @@ async function bootstrap() {
   try {
     await data_source.initialize();
 
-    app.use(cors());
+    app.use(
+      cors({
+        origin: "*",
+        allowedHeaders: "*",
+        methods: "*",
+      }),
+    );
     app.use(express.json());
     app.use(router);
 
